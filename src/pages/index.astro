@@ -1,0 +1,127 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { projects } from "../data/projects.ts";
+---
+
+<Layout>
+  <!-- Toggle Button for Geek Mode -->
+  <div class="text-center mt-8">
+    <button id="toggleGeekMode" class="btn btn-secondary hover:scale-105 transition-transform">
+      Toggle Geek Mode
+    </button>
+  </div>
+
+  <!-- Terminal Interface (Hidden by Default) -->
+  <div id="terminal" class="hidden mt-8">
+    <div class="mockup-code bg-neutral text-neutral-content p-6 rounded-lg">
+      <pre id="terminalOutput" class="overflow-y-auto max-h-96">
+        <code>Welcome to Geek Mode! Type "help" for a list of commands.</code>
+      </pre>
+      <div class="flex items-center gap-2">
+        <span class="text-green-400">$</span>
+        <input
+          id="terminalInput"
+          type="text"
+          class="bg-transparent border-none outline-none flex-grow"
+          placeholder="Type a command..."
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Portfolio Sections (Hidden in Geek Mode) -->
+  <div id="portfolio">
+    <!-- About Section -->
+    <section id="about" class="py-12">
+      <h2 class="text-3xl font-bold text-center mb-6">About Me</h2>
+      <p class="text-center max-w-2xl mx-auto">
+        I'm a passionate developer with experience in building web applications and solving real-world problems.
+      </p>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-12 bg-base-200">
+      <h2 class="text-3xl font-bold text-center mb-6">Projects</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+        <!-- Project Cards Go Here -->
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-12">
+      <h2 class="text-3xl font-bold text-center mb-6">Contact Me</h2>
+      <div class="card w-full max-w-lg bg-neutral text-neutral-content shadow-xl p-6 mx-auto">
+        <form class="space-y-4">
+          <!-- Form Fields Go Here -->
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <!-- JavaScript for Geek Mode -->
+  <script>
+    // Toggle Geek Mode
+    const toggleGeekModeButton = document.getElementById("toggleGeekMode");
+    const terminal = document.getElementById("terminal");
+    const terminalInput = document.getElementById("terminalInput");
+    const terminalOutput = document.getElementById("terminalOutput");
+    const portfolio = document.getElementById("portfolio");
+
+    toggleGeekModeButton.addEventListener("click", () => {
+      terminal.classList.toggle("hidden");
+      portfolio.classList.toggle("hidden"); // Hide portfolio in Geek Mode
+      if (!terminal.classList.contains("hidden")) {
+        terminalInput.focus(); // Focus on the input when terminal is shown
+      }
+    });
+
+    // Handle Commands
+    const commands = {
+      sudo help: () => `
+        Available Commands:
+        - help: Show this help message
+        - about: Display information about me
+        - projects: Display my projects
+        - contact: Display contact information
+        - clear: Clear the terminal
+      `,
+      about: () => `
+        About Me:
+        I'm a passionate developer with experience in building web applications and solving real-world problems.
+      `,
+      projects: () => `
+        My Projects:
+        1. Project 1: A web application for task management.
+        2. Project 2: A portfolio website built with Astro and Tailwind CSS.
+        3. Project 3: A REST API for a blogging platform.
+      `,
+      contact: () => `
+        Contact Me:
+        - Email: you@example.com
+        - GitHub: github.com/yourusername
+        - LinkedIn: linkedin.com/in/yourusername
+      `,
+      clear: () => {
+        terminalOutput.innerHTML = "";
+        return "Terminal cleared.";
+      },
+    };
+
+    terminalInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const command = terminalInput.value.trim().toLowerCase();
+        terminalInput.value = ""; // Clear input
+
+        if (commands[command]) {
+          const output = commands[command]();
+          terminalOutput.innerHTML += `<code>$ ${command}</code>\n<code>${output}</code>\n`;
+        } else {
+          terminalOutput.innerHTML += `<code>$ ${command}</code>\n<code class="text-error">Command not found. Type "help" for a list of commands.</code>\n`;
+        }
+
+        // Scroll to the bottom of the terminal output
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+      }
+    });
+  </script>
+</Layout>
