@@ -14,7 +14,7 @@ export const educations = [
     {
       id: 1,
       year: "2022",
-      title: "Goa School of Cats",
+      title: "SCHOOL",
       description: "Meow Meow",
     },
     {
