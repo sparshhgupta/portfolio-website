@@ -1,6 +1,21 @@
 ---
+import { Github, Linkedin, Instagram, Mail } from "lucide-astro";
 ---
 
 <footer class="bg-vs-dark border-t border-gray-700 p-4 text-center">
-  <p>© 2025 My Portfolio. All rights reserved.</p>
+  <div class="flex justify-center space-x-6 mb-2">
+    <a href="YOUR_GITHUB_LINK" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-vs-blue">
+      <Github size={24} />
+    </a>
+    <a href="YOUR_LINKEDIN_LINK" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-vs-blue">
+      <Linkedin size={24} />
+    </a>
+    <a href="YOUR_INSTAGRAM_LINK" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-vs-blue">
+      <Instagram size={24} />
+    </a>
+    <a href="mailto:YOUR_EMAIL" class="text-gray-400 hover:text-vs-blue">
+      <Mail size={24} />
+    </a>
+  </div>
+  <p class="text-gray-400">© 2025 My Portfolio. All rights reserved.</p>
 </footer>
