@@ -4,16 +4,33 @@ import { projects } from "../data/projects.ts";
 ---
 
 <Layout>
-  <!-- Toggle Button for Geek Mode -->
-  <div class="text-center mt-8">
-    <button id="toggleGeekMode" class="btn btn-secondary hover:scale-105 transition-transform">
-      Toggle Geek Mode
-    </button>
+  <!-- Hero Section -->
+  <div
+  class="hero min-h-screen w-full"
+  style="background-image: url(https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.webp);">
+  <div class="hero-overlay bg-opacity-80"></div>
+  <div class="hero-content text-neutral-content text-center">
+    <div class="max-w-md">
+      <h1 class="mb-5 text-5xl font-bold">Hello there</h1>
+      <p class="mb-5">
+        Welcome to our portfolio!
+      </p>
+      <button class="btn btn-primary">Get Started</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toggle Button for Geek Mode -->
+  <div class="fixed top-4 right-4 z-50">
+    <label class="label cursor-pointer flex items-center gap-2">
+      <span class="label-text text-white text-lg">Geek Mode</span>
+      <input id="toggleGeekMode" type="checkbox" class="toggle toggle-primary" />
+    </label>
   </div>
 
-  <!-- Terminal Interface (Hidden by Default) -->
-  <div id="terminal" class="hidden mt-8">
-    <div class="mockup-code bg-neutral text-neutral-content p-6 rounded-lg">
+<!-- Terminal Interface (Hidden by Default) -->
+  <div id="terminal" class="hidden fixed justify-center inset-0 bg-black bg-opacity-90 p-8 z-100">
+    <div class="mockup-code bg-neutral text-neutral-content p-6 rounded-lg w-full max-w-3xl mx-auto">
       <pre id="terminalOutput" class="overflow-y-auto max-h-96">
         <code>Welcome to Geek Mode! Type "help" for a list of commands.</code>
       </pre>
@@ -28,38 +45,36 @@ import { projects } from "../data/projects.ts";
       </div>
     </div>
   </div>
-
   <!-- Portfolio Sections (Hidden in Geek Mode) -->
   <div id="portfolio">
     <!-- About Section -->
-    <section id="about" class="py-12">
-      <h2 class="text-3xl font-bold text-center mb-6">About Me</h2>
-      <p class="text-center max-w-2xl mx-auto">
-        I'm a passionate developer with experience in building web applications and solving real-world problems.
-      </p>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="py-12 bg-base-200">
-      <h2 class="text-3xl font-bold text-center mb-6">Projects</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-        <!-- Project Cards Go Here -->
-      </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-12">
-      <h2 class="text-3xl font-bold text-center mb-6">Contact Me</h2>
-      <div class="card w-full max-w-lg bg-neutral text-neutral-content shadow-xl p-6 mx-auto">
-        <form class="space-y-4">
-          <!-- Form Fields Go Here -->
-        </form>
+    <section id="about" class="py-20">
+      <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-8">About Me</h2>
+        <div class="flex flex-col md:flex-row items-center gap-8">
+          <div class="w-full md:w-1/2">
+            <img src="/images/profile.jpg" alt="Profile Picture" class="rounded-lg shadow-lg" />
+          </div>
+          <div class="w-full md:w-1/2">
+            <p class="text-lg mb-4">
+              I am Oggy
+            </p>
+            <p class="text-lg">
+              Heyy!
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   </div>
 
-  <!-- JavaScript for Geek Mode -->
+  <!-- JavaScript for Geek Mode and Animations -->
   <script>
+    import { projects } from "../data/projects.ts";
+
+    // Prepare project data as a string
+    const projectData = projects.map((project, index) => `${index + 1}. ${project.title}: ${project.description}`).join('\n');
+
     // Toggle Geek Mode
     const toggleGeekModeButton = document.getElementById("toggleGeekMode");
     const terminal = document.getElementById("terminal");
@@ -77,7 +92,7 @@ import { projects } from "../data/projects.ts";
 
     // Handle Commands
     const commands = {
-      sudo help: () => `
+      help: () => `
         Available Commands:
         - help: Show this help message
         - about: Display information about me
@@ -91,15 +106,13 @@ import { projects } from "../data/projects.ts";
       `,
       projects: () => `
         My Projects:
-        1. Project 1: A web application for task management.
-        2. Project 2: A portfolio website built with Astro and Tailwind CSS.
-        3. Project 3: A REST API for a blogging platform.
+        ${projectData}
       `,
       contact: () => `
         Contact Me:
-        - Email: you@example.com
-        - GitHub: github.com/yourusername
-        - LinkedIn: linkedin.com/in/yourusername
+        - Email: oggy@gmail.com
+        - GitHub: github.com/oggy
+        - LinkedIn: linkedin.com/in/oggy
       `,
       clear: () => {
         terminalOutput.innerHTML = "";
