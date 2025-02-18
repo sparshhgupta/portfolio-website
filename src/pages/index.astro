@@ -13,9 +13,8 @@ import { projects } from "../data/projects.ts";
     <div class="max-w-md">
       <h1 class="mb-5 text-5xl font-bold">Hello there</h1>
       <p class="mb-5">
-        Welcome to our portfolio!
+        Welcome!
       </p>
-      <button class="btn btn-primary">Get Started</button>
     </div>
   </div>
 </div>
@@ -24,15 +23,18 @@ import { projects } from "../data/projects.ts";
   <div class="fixed top-4 right-4 z-50">
     <label class="label cursor-pointer flex items-center gap-2">
       <span class="label-text text-white text-lg">Geek Mode</span>
-      <input id="toggleGeekMode" type="checkbox" class="toggle toggle-primary" />
+      <input id="toggleGeekMode" type="checkbox" class="toggle toggle-primary" checked/>
     </label>
   </div>
-
+  
 <!-- Terminal Interface (Hidden by Default) -->
-  <div id="terminal" class="hidden fixed justify-center inset-0 bg-black bg-opacity-90 p-8 z-100">
+  <div id="terminal" class=" fixed justify-center inset-0 bg-black bg-opacity-90 p-8 z-100">
     <div class="mockup-code bg-neutral text-neutral-content p-6 rounded-lg w-full max-w-3xl mx-auto">
       <pre id="terminalOutput" class="overflow-y-auto max-h-96">
-        <code>Welcome to Geek Mode! Type "help" for a list of commands.</code>
+        <code>Welcome to Geek Mode! Type "echo help" for a list of commands.
+          CHALLENGE: Are you a real Geek? 
+          Use your cmdline knowledge to get to our social media handles
+          Unable to find? => Use echo help-social-media to get the handles.</code>
       </pre>
       <div class="flex items-center gap-2">
         <span class="text-green-400">$</span>
@@ -45,8 +47,9 @@ import { projects } from "../data/projects.ts";
       </div>
     </div>
   </div>
+  
   <!-- Portfolio Sections (Hidden in Geek Mode) -->
-  <div id="portfolio">
+  <div id="portfolio" class="hidden">
     <!-- About Section -->
     <section id="about" class="py-20">
       <div class="container mx-auto px-4">
@@ -72,10 +75,8 @@ import { projects } from "../data/projects.ts";
   <script>
     import { projects } from "../data/projects.ts";
 
-    // Prepare project data as a string
     const projectData = projects.map((project, index) => `${index + 1}. ${project.title}: ${project.description}`).join('\n');
 
-    // Toggle Geek Mode
     const toggleGeekModeButton = document.getElementById("toggleGeekMode");
     const terminal = document.getElementById("terminal");
     const terminalInput = document.getElementById("terminalInput");
@@ -84,55 +85,85 @@ import { projects } from "../data/projects.ts";
 
     toggleGeekModeButton.addEventListener("click", () => {
       terminal.classList.toggle("hidden");
-      portfolio.classList.toggle("hidden"); // Hide portfolio in Geek Mode
+      portfolio.classList.toggle("hidden"); 
       if (!terminal.classList.contains("hidden")) {
-        terminalInput.focus(); // Focus on the input when terminal is shown
+        terminalInput.focus(); 
       }
     });
 
-    // Handle Commands
     const commands = {
-      help: () => `
-        Available Commands:
-        - help: Show this help message
-        - about: Display information about me
-        - projects: Display my projects
-        - contact: Display contact information
+      "echo help": () => `
+        > Available Commands:
+        - echo help: Show this help message
+        - echo about: Display information about me
+        - ls projects: Display my projects
+        - open resume.pdf: Open resume
+        - echo help-social-media: Challenge help
+        - echo hint-social-media
         - clear: Clear the terminal
+        - exit: Return to normal mode
       `,
-      about: () => `
-        About Me:
+      "echo about": () => `
+        > About Me:
         I'm a passionate developer with experience in building web applications and solving real-world problems.
       `,
-      projects: () => `
-        My Projects:
+      "ls projects": () => `
+        > My Projects:
         ${projectData}
       `,
-      contact: () => `
-        Contact Me:
-        - Email: oggy@gmail.com
-        - GitHub: github.com/oggy
-        - LinkedIn: linkedin.com/in/oggy
+      "echo hint-social-media": () => `
+        > You are close:
+          __ insta
+          __ linkedin
+          __ github
       `,
+      "open resume.pdf": () => {
+        window.location.href = "https://drive.google.com/drive/u/1/folders/1LOYdQnEFgZqrJaZuxVEkodO59qomq07d";
+        return "> Opening Resume...";
+      },
       clear: () => {
         terminalOutput.innerHTML = "";
-        return "Terminal cleared.";
+        return "> Terminal cleared.";
       },
+      "cd insta": () => {
+        window.location.href = "https://instagram.com/oggy";
+        return "> You are a real geek. Redirecting to Instagram...";
+      },
+      "cd linkedin": () => {
+        window.location.href = "https://linkedin.com/oggy";
+        return "> You are a real geek. Redirecting to LinkedIn..";
+      },
+      "cd github": () => {
+        window.location.href = "https://github.com/oggy";
+        return "> You are a real geek. Redirecting to Github...";
+      },
+      "echo help-social-media" : () => `
+        > Available Commands:
+        > Use these commands to get redirected to our social handles
+        - cd insta: Redirect to Instagram
+        - cd linkedin: Redirect to LinkedIn
+        - cd github: Redirect to GitHub
+      `,
+      "exit": () => {
+        terminal.classList.add("hidden");
+        portfolio.classList.remove("hidden");
+        toggleGeekModeButton.checked = false;
+        return "> Exiting Geek Mode...";
+      }
     };
 
     terminalInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         const command = terminalInput.value.trim().toLowerCase();
-        terminalInput.value = ""; // Clear input
+        terminalInput.value = "";
 
         if (commands[command]) {
           const output = commands[command]();
           terminalOutput.innerHTML += `<code>$ ${command}</code>\n<code>${output}</code>\n`;
         } else {
-          terminalOutput.innerHTML += `<code>$ ${command}</code>\n<code class="text-error">Command not found. Type "help" for a list of commands.</code>\n`;
+          terminalOutput.innerHTML += `<code>$ ${command}</code>\n<code class="text-error">Command not found. Type \"help\" for a list of commands.</code>\n`;
         }
 
-        // Scroll to the bottom of the terminal output
         terminalOutput.scrollTop = terminalOutput.scrollHeight;
       }
     });
